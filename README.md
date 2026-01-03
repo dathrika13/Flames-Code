@@ -24,7 +24,11 @@ The ultimate FLAMES relationship calculator with **colorful CLI** and **beautifu
 | 🌐 No installation | ❌ | ✅ |
 
 ---
+## Live Demo [![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen)](https://dathrika13.github.io/Flames-Code/Flames_GUI.html)
 
+👉 [Open FLAMES Web GUI](https://dathrika13.github.io/Flames-Code/Flames_GUI.html)
+
+---
 ## 📁 Files Included
 
 ```
