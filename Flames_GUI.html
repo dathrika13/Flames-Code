@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔥 FLAMES - Relationship Calculator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Pacifico&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-family: 'Pacifico', cursive;
+            font-size: 3rem;
+            background: linear-gradient(45deg, #ff6b6b, #ff8e53, #feca57);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1rem;
+            margin-top: 5px;
+        }
+
+        .flames-letters {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin: 20px 0;
+        }
+
+        .flames-letters span {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: white;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .flames-letters span:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .letter-F { background: linear-gradient(135deg, #11998e, #38ef7d); }
+        .letter-L { background: linear-gradient(135deg, #ee0979, #ff6a00); }
+        .letter-A { background: linear-gradient(135deg, #4776E6, #8E54E9); }
+        .letter-M { background: linear-gradient(135deg, #f7971e, #ffd200); }
+        .letter-E { background: linear-gradient(135deg, #d63031, #e17055); }
+        .letter-S { background: linear-gradient(135deg, #2193b0, #6dd5ed); }
+
+        .input-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s;
+            background: #f8f9fa;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+            background: white;
+        }
+
+        .input-group .icon {
+            position: absolute;
+            right: 15px;
+            top: 42px;
+            font-size: 1.2rem;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Poppins', sans-serif;
+            margin-top: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
+        }
+
+        .btn-primary:active {
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #666;
+            margin-top: 15px;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        /* Result Section */
+        .result-section {
+            display: none;
+            text-align: center;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-names {
+            font-size: 1.3rem;
+            color: #333;
+            margin: 20px 0;
+        }
+
+        .result-names .heart {
+            color: #ff6b6b;
+            animation: heartbeat 1s ease infinite;
+            display: inline-block;
+            margin: 0 10px;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .result-box {
+            padding: 30px;
+            border-radius: 20px;
+            margin: 20px 0;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .result-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: rgba(255,255,255,0.1);
+            transform: rotate(30deg);
+            animation: shine 3s ease-in-out infinite;
+        }
+
+        @keyframes shine {
+            0%, 100% { transform: translateX(-100%) rotate(30deg); }
+            50% { transform: translateX(100%) rotate(30deg); }
+        }
+
+        .result-box h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .result-box .emoji {
+            font-size: 4rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .result-box p {
+            font-size: 1rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .result-friends { background: linear-gradient(135deg, #11998e, #38ef7d); }
+        .result-love { background: linear-gradient(135deg, #ee0979, #ff6a00); }
+        .result-affection { background: linear-gradient(135deg, #4776E6, #8E54E9); }
+        .result-marriage { background: linear-gradient(135deg, #f7971e, #ffd200); }
+        .result-enemies { background: linear-gradient(135deg, #d63031, #e17055); }
+        .result-siblings { background: linear-gradient(135deg, #2193b0, #6dd5ed); }
+
+        /* History Section */
+        .history-section {
+            margin-top: 30px;
+            border-top: 2px solid #eee;
+            padding-top: 20px;
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .history-header h3 {
+            color: #333;
+            font-size: 1.1rem;
+        }
+
+        .history-header button {
+            background: none;
+            border: none;
+            color: #667eea;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .history-list {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            transition: transform 0.2s;
+        }
+
+        .history-item:hover {
+            transform: translateX(5px);
+        }
+
+        .history-names {
+            font-size: 0.9rem;
+            color: #333;
+        }
+
+        .history-result {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .loading .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Tooltip styles */
+        .flames-letters span {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .flames-letters span::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 5px 10px;
+            background: #333;
+            color: white;
+            border-radius: 5px;
+            font-size: 0.75rem;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .flames-letters span:hover::after {
+            opacity: 1;
+            visibility: visible;
+            bottom: 120%;
+        }
+
+        /* Sound toggle */
+        .sound-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .sound-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .container {
+                padding: 25px;
+            }
+
+            .header h1 {
+                font-size: 2.2rem;
+            }
+
+            .flames-letters span {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
+
+            .result-box h2 {
+                font-size: 1.5rem;
+            }
+
+            .result-box .emoji {
+                font-size: 3rem;
+            }
+        }
+
+        /* Confetti animation for special results */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            top: -10px;
+            animation: confetti-fall 3s ease-in-out forwards;
+        }
+
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #999;
+            font-size: 0.85rem;
+        }
+
+        .footer a {
+            color: #667eea;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button class="sound-toggle" onclick="toggleSound()" title="Toggle Sound">🔊</button>
+        
+        <div class="header">
+            <h1>🔥 FLAMES</h1>
+            <p>Relationship Calculator</p>
+            <div class="flames-letters">
+                <span class="letter-F" data-tooltip="Friends">F</span>
+                <span class="letter-L" data-tooltip="Love">L</span>
+                <span class="letter-A" data-tooltip="Affection">A</span>
+                <span class="letter-M" data-tooltip="Marriage">M</span>
+                <span class="letter-E" data-tooltip="Enemies">E</span>
+                <span class="letter-S" data-tooltip="Siblings">S</span>
+            </div>
+        </div>
+
+        <!-- Input Form -->
+        <div id="inputSection">
+            <div class="input-group">
+                <label for="name1">👤 First Name</label>
+                <input type="text" id="name1" placeholder="Enter first name..." maxlength="100">
+                <span class="icon">💕</span>
+            </div>
+
+            <div class="input-group">
+                <label for="name2">👤 Second Name</label>
+                <input type="text" id="name2" placeholder="Enter second name..." maxlength="100">
+                <span class="icon">💕</span>
+            </div>
+
+            <button class="btn btn-primary" onclick="calculateFlames()">
+                🔥 Calculate Relationship
+            </button>
+        </div>
+
+        <!-- Loading -->
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Calculating your destiny... 💫</p>
+        </div>
+
+        <!-- Result Section -->
+        <div class="result-section" id="resultSection">
+            <div class="result-names">
+                <span id="displayName1"></span>
+                <span class="heart">❤️</span>
+                <span id="displayName2"></span>
+            </div>
+
+            <div class="result-box" id="resultBox">
+                <span class="emoji" id="resultEmoji"></span>
+                <h2 id="resultTitle"></h2>
+                <p id="resultMessage"></p>
+            </div>
+
+            <button class="btn btn-primary" onclick="tryAgain()">
+                🔄 Try Another Pair
+            </button>
+            
+            <button class="btn btn-secondary" onclick="shareResult()">
+                📤 Share Result
+            </button>
+        </div>
+
+        <!-- History Section -->
+        <div class="history-section" id="historySection">
+            <div class="history-header">
+                <h3>📜 Recent History</h3>
+                <button onclick="clearHistory()">Clear All</button>
+            </div>
+            <div class="history-list" id="historyList">
+                <!-- History items will be added here -->
+            </div>
+        </div>
+
+        <div class="footer">
+            Made with ❤️ by <a href="#">Saicharitha Dathrika</a>
+        </div>
+    </div>
+
+    <!-- Audio elements for sound effects -->
+    <audio id="successSound" preload="auto">
+        <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdH2JkYuDfXZ3fYGHi4mGgn17fIGFiYqIhYF9fH2Ag4aIiIeEgn59fX+ChYeHhoSDgH5+f4GDhYaGhYSCgH9+f4CCg4SFhYSEgoB/fn5/gIKDhIWEhIOBgH9+f3+BgoOEhISDgYCAf35/f4GCg4ODg4KBgIB/fn9/gIGCg4ODgoKBgH9/f3+AgYKCg4KCgoGAf39/f4CAgYKCgoKCgYCAf39/f4CAgYKCgoKBgYCAf39/f4CAgYGBgoKBgYCAf39/f4CAgYGBgoGBgYCAf39/f4CAgYGBgYGBgYCAf39/f4CAgYGBgYGBgYCAf39/f4CAgYGBgYGBgICAgH9/f3+AgIGBgYGBgICAgH9/f3+AgIGBgYGBgICAgH9/f3+AgICBgYGBgICAgH9/f3+AgICBgYGBgICAgH9/f3+AgICAgYGAgICAgH9/f3+AgICAgYGAgICAgH9/f3+AgICAgIGAgICAgH9/f3+AgICAgICAgICAgH9/f3+AgICAgICAgICAgH9/" type="audio/wav">
+    </audio>
+    <audio id="loveSound" preload="auto">
+        <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJGfoaCYkYmGiI6WnJ6bmJORjo6QlJeZmZiWk5GQkJKUlpeXlpWTkpGRkpOUlZaWlZSTkpGRkpOTlJWVlJSTkpGRkZKTlJSUlJOTkpGRkZKSk5SUlJOTkpKRkZGSk5OUlJOTk5KRkZGSk5OTk5OTk5KRkZGSk5OTk5OTkpKRkZGSkpOTk5OTkpKRkZGSkpOTk5OSkpKRkZGSkpKTk5OTkpKRkZGSkpKTk5OSkpKRkZGRkpKTk5OSkpKRkZGRkpKSk5OTkpKRkZGRkpKSk5OSkpKRkZGRkZKSk5OSkpKRkZGRkZKSk5OSkpKRkZGRkZKSkpOTkpKRkZGRkZKSkpOSkpKRkZGRkZGSkpOTkpKRkZGRkZGSkpKTkpKRkZGRkZGSkpKSkpKRkZGRkZGRkpKSkpKRkZGRkZGRkpKSkpKRkZGRkZGRkpKSkpKRkZGRkZGRkZKSkpKRkZGRkZGRkZKSkpKRkZGR" type="audio/wav">
+    </audio>
+
+    <script>
+        // ============================================
+        // Global Variables
+        // ============================================
+        let history = JSON.parse(localStorage.getItem('flamesHistory')) || [];
+        let soundEnabled = true;
+
+        // ============================================
+        // Initialize
+        // ============================================
+        document.addEventListener('DOMContentLoaded', function() {
+            loadHistory();
+            
+            // Enter key to submit
+            document.getElementById('name1').addEventListener('keypress', function(e) {
+                if(e.key === 'Enter') document.getElementById('name2').focus();
+            });
+            document.getElementById('name2').addEventListener('keypress', function(e) {
+                if(e.key === 'Enter') calculateFlames();
+            });
+        });
+
+        // ============================================
+        // FLAMES Calculation
+        // ============================================
+        function calculateFlames() {
+            const name1 = document.getElementById('name1').value.trim();
+            const name2 = document.getElementById('name2').value.trim();
+
+            // Validation
+            if(!name1 || !name2) {
+                showAlert('Please enter both names! 💕');
+                return;
+            }
+
+            // Clean names (remove non-alphabetic characters)
+            const cleanName1 = name1.replace(/[^a-zA-Z]/g, '').toLowerCase();
+            const cleanName2 = name2.replace(/[^a-zA-Z]/g, '').toLowerCase();
+
+            if(!cleanName1 || !cleanName2) {
+                showAlert('Names must contain at least one letter! 📝');
+                return;
+            }
+
+            // Show loading
+            document.getElementById('inputSection').style.display = 'none';
+            document.getElementById('loading').style.display = 'block';
+
+            // Calculate after delay for effect
+            setTimeout(() => {
+                const result = computeFlames(cleanName1, cleanName2);
+                displayResult(name1, name2, result);
+                
+                // Save to history
+                saveToHistory(name1, name2, result);
+                
+                // Play sound
+                if(soundEnabled) playSound(result);
+                
+                // Show confetti for Love or Marriage
+                if(result === 'L' || result === 'M') {
+                    createConfetti();
+                }
+            }, 1500);
+        }
+
+        function computeFlames(name1, name2) {
+            // Count letter frequencies
+            const freq1 = {};
+            const freq2 = {};
+
+            for(let char of name1) {
+                freq1[char] = (freq1[char] || 0) + 1;
+            }
+
+            for(let char of name2) {
+                freq2[char] = (freq2[char] || 0) + 1;
+            }
+
+            // Calculate sum of absolute differences
+            const allChars = new Set([...Object.keys(freq1), ...Object.keys(freq2)]);
+            let sum = 0;
+
+            for(let char of allChars) {
+                const count1 = freq1[char] || 0;
+                const count2 = freq2[char] || 0;
+                sum += Math.abs(count1 - count2);
+            }
+
+            // FLAMES elimination
+            if(sum === 0) return 'M'; // Same name = Marriage
+
+            let flames = ['F', 'L', 'A', 'M', 'E', 'S'];
+            let pos = 0;
+
+            while(flames.length > 1) {
+                pos = (pos + sum - 1) % flames.length;
+                flames.splice(pos, 1);
+                if(pos === flames.length) pos = 0;
+            }
+
+            return flames[0];
+        }
+
+        // ============================================
+        // Display Results
+        // ============================================
+        function displayResult(name1, name2, result) {
+            const results = {
+                'F': { 
+                    title: 'FRIENDS', 
+                    emoji: '👫', 
+                    message: 'You two make amazing friends! Cherish this beautiful friendship!',
+                    class: 'result-friends'
+                },
+                'L': { 
+                    title: 'LOVE', 
+                    emoji: '💕', 
+                    message: 'There\'s LOVE in the air! You two are meant to be together!',
+                    class: 'result-love'
+                },
+                'A': { 
+                    title: 'AFFECTION', 
+                    emoji: '💖', 
+                    message: 'Deep affection connects you both! There\'s a special bond!',
+                    class: 'result-affection'
+                },
+                'M': { 
+                    title: 'MARRIAGE', 
+                    emoji: '💒', 
+                    message: 'Wedding bells are ringing! You two are destined to be together!',
+                    class: 'result-marriage'
+                },
+                'E': { 
+                    title: 'ENEMIES', 
+                    emoji: '😅', 
+                    message: 'Oops! Maybe try to understand each other better?',
+                    class: 'result-enemies'
+                },
+                'S': { 
+                    title: 'SIBLINGS', 
+                    emoji: '👨‍👩‍👧‍👦', 
+                    message: 'You share a sibling-like bond! Family love is forever!',
+                    class: 'result-siblings'
+                }
+            };
+
+            const data = results[result];
+
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('resultSection').style.display = 'block';
+
+            document.getElementById('displayName1').textContent = name1;
+            document.getElementById('displayName2').textContent = name2;
+
+            const resultBox = document.getElementById('resultBox');
+            resultBox.className = 'result-box ' + data.class;
+
+            document.getElementById('resultEmoji').textContent = data.emoji;
+            document.getElementById('resultTitle').textContent = data.title;
+            document.getElementById('resultMessage').textContent = data.message;
+        }
+
+        function tryAgain() {
+            document.getElementById('resultSection').style.display = 'none';
+            document.getElementById('inputSection').style.display = 'block';
+            document.getElementById('name1').value = '';
+            document.getElementById('name2').value = '';
+            document.getElementById('name1').focus();
+        }
+
+        // ============================================
+        // History Management
+        // ============================================
+        function saveToHistory(name1, name2, result) {
+            const resultNames = {
+                'F': 'Friends', 'L': 'Love', 'A': 'Affection',
+                'M': 'Marriage', 'E': 'Enemies', 'S': 'Siblings'
+            };
+
+            const record = {
+                name1: name1,
+                name2: name2,
+                result: result,
+                resultText: resultNames[result],
+                timestamp: new Date().toLocaleString()
+            };
+
+            history.unshift(record);
+            if(history.length > 50) history.pop();
+
+            localStorage.setItem('flamesHistory', JSON.stringify(history));
+            loadHistory();
+        }
+
+        function loadHistory() {
+            const historyList = document.getElementById('historyList');
+            
+            if(history.length === 0) {
+                historyList.innerHTML = '<p style="text-align:center;color:#999;padding:20px;">No history yet! Play to create some memories! 💕</p>';
+                return;
+            }
+
+            const resultColors = {
+                'F': '#11998e', 'L': '#ee0979', 'A': '#4776E6',
+                'M': '#f7971e', 'E': '#d63031', 'S': '#2193b0'
+            };
+
+            historyList.innerHTML = history.slice(0, 10).map(item => `
+                <div class="history-item">
+                    <span class="history-names">${item.name1} & ${item.name2}</span>
+                    <span class="history-result" style="background:${resultColors[item.result]}">${item.resultText}</span>
+                </div>
+            `).join('');
+        }
+
+        function clearHistory() {
+            if(confirm('Are you sure you want to clear all history?')) {
+                history = [];
+                localStorage.removeItem('flamesHistory');
+                loadHistory();
+            }
+        }
+
+        // ============================================
+        // Sound Effects
+        // ============================================
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            document.querySelector('.sound-toggle').textContent = soundEnabled ? '🔊' : '🔇';
+        }
+
+        function playSound(result) {
+            // Use Web Audio API for simple beeps
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            
+            if(result === 'L' || result === 'M') {
+                // Happy sound for Love/Marriage
+                playTone(audioContext, 523, 150);
+                setTimeout(() => playTone(audioContext, 659, 150), 150);
+                setTimeout(() => playTone(audioContext, 784, 200), 300);
+            } else {
+                // Simple beep for others
+                playTone(audioContext, 600, 200);
+            }
+        }
+
+        function playTone(audioContext, frequency, duration) {
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.value = frequency;
+            oscillator.type = 'sine';
+            
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration/1000);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + duration/1000);
+        }
+
+        // ============================================
+        // Confetti Effect
+        // ============================================
+        function createConfetti() {
+            const colors = ['#ff6b6b', '#feca57', '#48dbfb', '#ff9ff3', '#54a0ff', '#5f27cd'];
+            
+            for(let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + 'vw';
+                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => confetti.remove(), 4000);
+                }, i * 50);
+            }
+        }
+
+        // ============================================
+        // Share Result
+        // ============================================
+        function shareResult() {
+            const name1 = document.getElementById('displayName1').textContent;
+            const name2 = document.getElementById('displayName2').textContent;
+            const result = document.getElementById('resultTitle').textContent;
+            
+            const shareText = `🔥 FLAMES Result 🔥\n${name1} ❤️ ${name2}\nResult: ${result}!\n\nTry it yourself!`;
+            
+            if(navigator.share) {
+                navigator.share({
+                    title: 'FLAMES Result',
+                    text: shareText
+                });
+            } else {
+                // Fallback: copy to clipboard
+                navigator.clipboard.writeText(shareText).then(() => {
+                    showAlert('Result copied to clipboard! 📋');
+                });
+            }
+        }
+
+        // ============================================
+        // Utility Functions
+        // ============================================
+        function showAlert(message) {
+            alert(message); // Can be replaced with a custom modal
+        }
+    </script>
+</body>
+</html>
